@@ -1,0 +1,27 @@
+{
+  "effect.endurance.endurance": "堅忍",
+  "effect.endurance.deep_wound": "深度傷口",
+
+  "death.attack.deep_wound": "%1$s 的傷勢過重了。",
+  "death.attack.deep_wound.player": "%1$s 的傷勢過重了。",
+
+  "enchantment.endurance.undying": "不死",
+
+  "item.endurance.undying_cooldown.tooltip": "不死冷卻中（%d:%s）",
+  "item.endurance.undying_cooldown.activated.tooltip": "不死生效中",
+
+  "item.minecraft.potion.effect.endurance": "堅忍藥水",
+  "item.minecraft.potion.effect.bleeding": "失血藥水",
+  "item.minecraft.potion.effect.long_endurance": "堅忍藥水",
+  "item.minecraft.potion.effect.long_bleeding": "失血藥水",
+
+  "item.minecraft.splash_potion.effect.endurance": "飛濺型堅忍藥水",
+  "item.minecraft.splash_potion.effect.bleeding": "飛濺型失血藥水",
+  "item.minecraft.splash_potion.effect.long_endurance": "飛濺型堅忍藥水",
+  "item.minecraft.splash_potion.effect.long_bleeding": "飛濺型失血藥水",
+
+  "item.minecraft.lingering_potion.effect.endurance": "滯留型堅忍藥水",
+  "item.minecraft.lingering_potion.effect.bleeding": "滯留型失血藥水",
+  "item.minecraft.lingering_potion.effect.long_endurance": "滯留型堅忍藥水",
+  "item.minecraft.lingering_potion.effect.long_bleeding": "滯留型失血藥水"
+}
