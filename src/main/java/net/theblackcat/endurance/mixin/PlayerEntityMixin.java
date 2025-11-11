@@ -79,7 +79,7 @@ public class PlayerEntityMixin implements IPlayerEntity {
 
     @Inject(method = "tick", at = @At("HEAD"))
     private void Tick(CallbackInfo info) {
-        if (self.getWorld() instanceof ServerWorld world) {
+        if (self.getEntityWorld() instanceof ServerWorld world) {
             var chest = self.getEquippedStack(EquipmentSlot.CHEST);
             int lvl = EnduranceEnchantmentEffects.GetLevel(world, EnduranceEnchantmentEffects.UNDYING, chest);
             boolean hasUndying = !chest.isEmpty()
@@ -136,7 +136,7 @@ public class PlayerEntityMixin implements IPlayerEntity {
                     }
                 }
 
-                prevPos = self.getPos();
+                prevPos = self.getEntityPos();
             }
 
             if (killEnduranceCd > 0) {
@@ -191,7 +191,7 @@ public class PlayerEntityMixin implements IPlayerEntity {
     }
 
     @Inject(method = "onKilledOther", at = @At("RETURN"))
-    private void ApplyEnduranceOnKilledOther(ServerWorld world, LivingEntity other, CallbackInfoReturnable<Boolean> info) {
+    private void ApplyEnduranceOnKilledOther(ServerWorld world, LivingEntity other, DamageSource damageSource, CallbackInfoReturnable<Boolean> info) {
         if (info.getReturnValue() && killEnduranceCd <= 0 && !self.hasStatusEffect(EnduranceStatusEffects.ENDURANCE)) {
             float chance = 0.2f;
             chance += MathHelper.lerp(self.getHealth() / self.getMaxHealth(), 0.6f, 0f);
@@ -384,6 +384,6 @@ public class PlayerEntityMixin implements IPlayerEntity {
 
     @Unique
     private boolean IsMoving() {
-        return self.getPos().distanceTo(prevPos) > 0;
+        return self.getEntityPos().distanceTo(prevPos) > 0;
     }
 }

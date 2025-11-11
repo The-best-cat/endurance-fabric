@@ -41,7 +41,7 @@ public class Endurance implements ModInitializer {
             if (endurance.isInfinite()) {
                 var chest = player.getEquippedStack(EquipmentSlot.CHEST);
                 if (!chest.isEmpty()) {
-                    int level = EnduranceEnchantmentEffects.GetLevel(player.getWorld(), EnduranceEnchantmentEffects.UNDYING, chest);
+                    int level = EnduranceEnchantmentEffects.GetLevel(player.getEntityWorld(), EnduranceEnchantmentEffects.UNDYING, chest);
                     if (level > 0) {
                         int cooldown = 2400 - (level - 1) * 600;
                         chest.set(EnduranceDataComponents.UNDYING_COOLDOWN_TYPE, cooldown);

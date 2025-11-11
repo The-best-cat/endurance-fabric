@@ -41,11 +41,6 @@ public abstract class InGameHudMixin {
     private static final Identifier HEALED_DEEP_WOUND_HALF = Endurance.Id(path + "healed_deep_wound_container_half.png");
     @Unique
     private static final Identifier HEART_CONTAINER = Endurance.Id(path + "normal_container.png");
-    @Unique
-    private static final Identifier BLOOD_VIGNETTE = Identifier.ofVanilla("textures/misc/vignette.png");
-
-    @Unique
-    private float prevAlpha = 0;
 
     @Shadow
     @Final
@@ -54,10 +49,6 @@ public abstract class InGameHudMixin {
     @Shadow
     @Final
     private Random random;
-
-    @Shadow
-    @Final
-    private PlayerListHud playerListHud;
 
     @ModifyArgs(method = "renderStatusBars", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/hud/InGameHud;renderHealthBar(Lnet/minecraft/client/gui/DrawContext;Lnet/minecraft/entity/player/PlayerEntity;IIIIFIIIZ)V"))
     private void PassDeepWound(Args args) {
@@ -87,32 +78,6 @@ public abstract class InGameHudMixin {
                 }
             }
             info.cancel();
-        }
-    }
-
-    @Inject(method = "renderMiscOverlays", at = @At("TAIL"))
-    private void RenderDeepWoundVignette(DrawContext context, RenderTickCounter tickCounter, CallbackInfo info) throws IOException {
-        if (this.client.player instanceof IPlayerEntity player && ModConfig.Instance().ShouldShowVignette() && (player.GetInjuredTime() > 0 || (player.GetRemovedInjuriesTime() > 0 && player.GetRemovedInjuriesTime() < 30))) {
-            float alpha;
-            if (player.HasDeepWound()) {
-                alpha = MathHelper.lerp(Math.clamp((float) player.GetInjuredTime() / 10f, 0f, 1f), 0f, 0.3f);
-                alpha += MathHelper.lerp(player.GetTemporaryHealth() / 20f, 0.5f, 0f);
-            } else {
-                alpha = MathHelper.lerp(Math.clamp((float) player.GetRemovedInjuriesTime() / 30f, 0f, 1f), prevAlpha, 0);
-            }
-
-            int i = ColorHelper.getArgb((int) (alpha * 255f), 136, 8, 8);
-            context.drawTexture(RenderPipelines.GUI_TEXTURED,
-                    BLOOD_VIGNETTE,
-                    0, 0, 0f, 0f,
-                    context.getScaledWindowWidth(),
-                    context.getScaledWindowHeight(),
-                    context.getScaledWindowWidth(),
-                    context.getScaledWindowHeight(),
-                    i
-            );
-
-            prevAlpha = alpha;
         }
     }
 
