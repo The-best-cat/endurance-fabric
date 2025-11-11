@@ -4,13 +4,17 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gl.RenderPipelines;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.hud.InGameHud;
+import net.minecraft.client.gui.hud.PlayerListHud;
+import net.minecraft.client.render.RenderTickCounter;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.math.ColorHelper;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.random.Random;
 import net.theblackcat.endurance.Endurance;
+import net.theblackcat.endurance.config.ModConfig;
 import net.theblackcat.endurance.interfaces.IPlayerEntity;
-import net.theblackcat.endurance.status_effects.ModStatusEffects;
+import net.theblackcat.endurance.status_effects.EnduranceStatusEffects;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -20,6 +24,8 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.ModifyArgs;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.invoke.arg.Args;
+
+import java.io.IOException;
 
 @Mixin(InGameHud.class)
 public abstract class InGameHudMixin {
@@ -35,6 +41,11 @@ public abstract class InGameHudMixin {
     private static final Identifier HEALED_DEEP_WOUND_HALF = Endurance.Id(path + "healed_deep_wound_container_half.png");
     @Unique
     private static final Identifier HEART_CONTAINER = Endurance.Id(path + "normal_container.png");
+    @Unique
+    private static final Identifier BLOOD_VIGNETTE = Identifier.ofVanilla("textures/misc/vignette.png");
+
+    @Unique
+    private float prevAlpha = 0;
 
     @Shadow
     @Final
@@ -44,9 +55,13 @@ public abstract class InGameHudMixin {
     @Final
     private Random random;
 
+    @Shadow
+    @Final
+    private PlayerListHud playerListHud;
+
     @ModifyArgs(method = "renderStatusBars", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/hud/InGameHud;renderHealthBar(Lnet/minecraft/client/gui/DrawContext;Lnet/minecraft/entity/player/PlayerEntity;IIIIFIIIZ)V"))
     private void PassDeepWound(Args args) {
-        if (this.client.player.hasStatusEffect(ModStatusEffects.DEEP_WOUND) && this.client.player instanceof IPlayerEntity player) {
+        if (this.client.player.hasStatusEffect(EnduranceStatusEffects.DEEP_WOUND) && this.client.player instanceof IPlayerEntity player) {
             args.set(8, MathHelper.ceil(player.GetTemporaryHealth()));
             args.set(9, player.GetMendedProgress());
             args.set(10, player.LossPaused());
@@ -56,7 +71,7 @@ public abstract class InGameHudMixin {
     @Inject(method = "renderHealthBar", at = @At("HEAD"), cancellable = true)
     private void RenderDeepWound(DrawContext context, PlayerEntity player, int x, int y, int lines, int regeneratingHeartIndex, float maxHealth, int lastHealth, int health, int absorption, boolean blinking, CallbackInfo info) {
         //health = deep wound, absorption = mending, blinking = is loss paused
-        if (this.client.player.hasStatusEffect(ModStatusEffects.DEEP_WOUND)) {
+        if (this.client.player.hasStatusEffect(EnduranceStatusEffects.DEEP_WOUND)) {
             for (int j = 9; j >= 0; j--) {
                 int heartX = x + j * 8;
                 int heartY = y + (!blinking ? this.random.nextInt(2) : 0);
@@ -72,6 +87,32 @@ public abstract class InGameHudMixin {
                 }
             }
             info.cancel();
+        }
+    }
+
+    @Inject(method = "renderMiscOverlays", at = @At("TAIL"))
+    private void RenderDeepWoundVignette(DrawContext context, RenderTickCounter tickCounter, CallbackInfo info) throws IOException {
+        if (this.client.player instanceof IPlayerEntity player && ModConfig.Instance().ShouldShowVignette() && (player.GetInjuredTime() > 0 || (player.GetRemovedInjuriesTime() > 0 && player.GetRemovedInjuriesTime() < 30))) {
+            float alpha;
+            if (player.HasDeepWound()) {
+                alpha = MathHelper.lerp(Math.clamp((float) player.GetInjuredTime() / 10f, 0f, 1f), 0f, 0.3f);
+                alpha += MathHelper.lerp(player.GetTemporaryHealth() / 20f, 0.5f, 0f);
+            } else {
+                alpha = MathHelper.lerp(Math.clamp((float) player.GetRemovedInjuriesTime() / 30f, 0f, 1f), prevAlpha, 0);
+            }
+
+            int i = ColorHelper.getArgb((int) (alpha * 255f), 136, 8, 8);
+            context.drawTexture(RenderPipelines.GUI_TEXTURED,
+                    BLOOD_VIGNETTE,
+                    0, 0, 0f, 0f,
+                    context.getScaledWindowWidth(),
+                    context.getScaledWindowHeight(),
+                    context.getScaledWindowWidth(),
+                    context.getScaledWindowHeight(),
+                    i
+            );
+
+            prevAlpha = alpha;
         }
     }
 

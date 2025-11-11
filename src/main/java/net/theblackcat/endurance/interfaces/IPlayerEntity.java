@@ -12,4 +12,7 @@ public interface IPlayerEntity {
     boolean HasDeepWound();
     float GetHealRate();
     int GetMendedProgress();
+
+    int GetInjuredTime();
+    int GetRemovedInjuriesTime();
 }

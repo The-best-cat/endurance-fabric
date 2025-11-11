@@ -5,9 +5,8 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.util.Identifier;
-import net.theblackcat.endurance.Endurance;
 import net.theblackcat.endurance.interfaces.IPlayerEntity;
-import net.theblackcat.endurance.status_effects.ModStatusEffects;
+import net.theblackcat.endurance.status_effects.EnduranceStatusEffects;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
@@ -29,7 +28,7 @@ public class LivingEntityMixin {
 
     @Inject(method = "onStatusEffectsRemoved", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/effect/StatusEffect;onRemoved(Lnet/minecraft/entity/attribute/AttributeContainer;)V", shift = At.Shift.AFTER))
     private void RemoveDeepWound(Collection<StatusEffectInstance> effects, CallbackInfo info, @Local StatusEffectInstance instance) {
-        if (GetSelf() instanceof IPlayerEntity player && instance.getEffectType().matchesId(Identifier.of(ModStatusEffects.DEEP_WOUND.getIdAsString()))) {
+        if (GetSelf() instanceof IPlayerEntity player && instance.getEffectType().matchesId(Identifier.of(EnduranceStatusEffects.DEEP_WOUND.getIdAsString()))) {
             player.OnRemovedDeepWound();
         }
     }

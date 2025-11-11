@@ -7,21 +7,31 @@
 
   "enchantment.endurance.undying": "Undying",
 
-  "item.endurance.undying_cooldown.tooltip": "Undying In cooldown (%d:%s)",
+  "item.endurance.undying_cooldown.tooltip": "Undying in cooldown (%d:%s)",
   "item.endurance.undying_cooldown.activated.tooltip": "Undying Activated",
 
   "item.minecraft.potion.effect.endurance": "Potion of Endurance",
   "item.minecraft.potion.effect.bleeding": "Potion of Bleeding",
   "item.minecraft.potion.effect.long_endurance": "Potion of Endurance",
   "item.minecraft.potion.effect.long_bleeding": "Potion of Bleeding",
+  "item.minecraft.potion.effect.enhanced_endurance": "Potion of Endurance",
+  "item.minecraft.potion.effect.enhanced_bleeding": "Potion of Bleeding",
 
   "item.minecraft.splash_potion.effect.endurance": "Splash Potion of Endurance",
   "item.minecraft.splash_potion.effect.bleeding": "Splash Potion of Bleeding",
   "item.minecraft.splash_potion.effect.long_endurance": "Splash Potion of Endurance",
   "item.minecraft.splash_potion.effect.long_bleeding": "Splash Potion of Bleeding",
+  "item.minecraft.splash_potion.effect.enhanced_endurance": "Splash Potion of Endurance",
+  "item.minecraft.splash_potion.effect.enhanced_bleeding": "Splash Potion of Bleeding",
 
   "item.minecraft.lingering_potion.effect.endurance": "Lingering Potion of Endurance",
   "item.minecraft.lingering_potion.effect.bleeding": "Lingering Potion of Bleeding",
   "item.minecraft.lingering_potion.effect.long_endurance": "Lingering Potion of Endurance",
-  "item.minecraft.lingering_potion.effect.long_bleeding": "Lingering Potion of Bleeding"
+  "item.minecraft.lingering_potion.effect.long_bleeding": "Lingering Potion of Bleeding",
+  "item.minecraft.lingering_potion.effect.enhanced_endurance": "Lingering Potion of Endurance",
+  "item.minecraft.lingering_potion.effect.enhanced_bleeding": "Lingering Potion of Bleeding",
+
+
+  "modmenu.nameTranslation.endurance": "Endurance",
+  "modmenu.descriptionTranslation.endurance": "Added two new status effects, 【Endurance】 and 【Deep Wound】, as well as one enchantment and two related potions.\n\nSee the Wiki for details. Here is a brief introduction:\n\n【Endurance】\nPrevents death and adds 【Deep Wound】.\n\nIf you already have 【Deep Wound】, it will not take effect.\n\n【Deep Wound】\nGains 20 bleeding points that is lost over time, dying when it reaches zero.\n\nRestores health or crouching and stationary gains mending progress.\n\nWhen mending progress reaches its maximum, 【Deep Wound】 is removed, and you gain a brief speed boost and regeneration effect.\n\n【Undying】Enchantment\nProvides the 【Endurance】 status, with a maximum cooldown of 2 minutes after triggering."
 }

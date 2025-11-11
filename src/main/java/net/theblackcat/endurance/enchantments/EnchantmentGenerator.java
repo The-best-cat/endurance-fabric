@@ -3,14 +3,13 @@ package net.theblackcat.endurance.enchantments;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricDynamicRegistryProvider;
 import net.fabricmc.fabric.api.resource.conditions.v1.ResourceCondition;
-import net.minecraft.component.EnchantmentEffectComponentTypes;
 import net.minecraft.component.type.AttributeModifierSlot;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.registry.RegistryKey;
 import net.minecraft.registry.RegistryKeys;
 import net.minecraft.registry.RegistryWrapper;
 import net.minecraft.registry.tag.ItemTags;
-import net.theblackcat.endurance.enchantments.effects.ModEnchantmentEffects;
+import net.theblackcat.endurance.enchantments.effects.EnduranceEnchantmentEffects;
 
 import java.util.concurrent.CompletableFuture;
 
@@ -21,7 +20,7 @@ public class EnchantmentGenerator extends FabricDynamicRegistryProvider {
 
     @Override
     protected void configure(RegistryWrapper.WrapperLookup wrapperLookup, Entries entries) {
-        Register(entries, ModEnchantmentEffects.UNDYING, Enchantment.builder(
+        Register(entries, EnduranceEnchantmentEffects.UNDYING, Enchantment.builder(
                 Enchantment.definition(
                         wrapperLookup.getOrThrow(RegistryKeys.ITEM).getOrThrow(ItemTags.ARMOR_ENCHANTABLE),
                         10,

@@ -1,5 +1,6 @@
 package net.theblackcat.endurance.mixin;
 
+import com.mojang.authlib.GameProfile;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.LivingEntity;
@@ -20,12 +21,13 @@ import net.minecraft.storage.ReadView;
 import net.minecraft.storage.WriteView;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
+import net.minecraft.world.World;
 import net.theblackcat.endurance.Endurance;
-import net.theblackcat.endurance.damage_types.ModDamageTypes;
-import net.theblackcat.endurance.data_components.ModDataComponents;
-import net.theblackcat.endurance.enchantments.effects.ModEnchantmentEffects;
+import net.theblackcat.endurance.damage_types.EnduranceDamageTypes;
+import net.theblackcat.endurance.data_components.EnduranceDataComponents;
+import net.theblackcat.endurance.enchantments.effects.EnduranceEnchantmentEffects;
 import net.theblackcat.endurance.interfaces.IPlayerEntity;
-import net.theblackcat.endurance.status_effects.ModStatusEffects;
+import net.theblackcat.endurance.status_effects.EnduranceStatusEffects;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
@@ -55,7 +57,18 @@ public class PlayerEntityMixin implements IPlayerEntity {
     @Unique
     private int killEnduranceCd = 0;
     @Unique
+    private int appliedDeepWoundTime = 0;
+    @Unique
+    private int removedDeepWoundTime = 0;
+    @Unique
     private Vec3d prevPos = Vec3d.ZERO;
+    @Unique
+    private PlayerEntity self;
+    
+    @Inject(method = "<init>", at = @At("TAIL"))
+    private void Initialise(World world, GameProfile profile, CallbackInfo info) {
+        self = (PlayerEntity) (Object)this;
+    }
 
     @Inject(method = "initDataTracker", at = @At("TAIL"))
     private void InitCustomData(DataTracker.Builder builder, CallbackInfo info) {
@@ -66,20 +79,20 @@ public class PlayerEntityMixin implements IPlayerEntity {
 
     @Inject(method = "tick", at = @At("HEAD"))
     private void Tick(CallbackInfo info) {
-        var self = GetSelf();
         if (self.getWorld() instanceof ServerWorld world) {
             var chest = self.getEquippedStack(EquipmentSlot.CHEST);
+            int lvl = EnduranceEnchantmentEffects.GetLevel(world, EnduranceEnchantmentEffects.UNDYING, chest);
             boolean hasUndying = !chest.isEmpty()
                     && chest.isIn(ItemTags.CHEST_ARMOR)
-                    && ModEnchantmentEffects.GetLevel(world, ModEnchantmentEffects.UNDYING, chest) > 0;
-            boolean offCooldown = chest.getOrDefault(ModDataComponents.UNDYING_COOLDOWN_TYPE, -1) == 0;
+                    && lvl > 0;
+            boolean offCooldown = chest.getOrDefault(EnduranceDataComponents.UNDYING_COOLDOWN_TYPE, -1) == 0;
 
             if (hasUndying && offCooldown) {
-                if (!self.hasStatusEffect(ModStatusEffects.ENDURANCE) && !self.hasStatusEffect(ModStatusEffects.DEEP_WOUND)) {
-                    self.addStatusEffect(new StatusEffectInstance(ModStatusEffects.ENDURANCE, -1, 0, false, true, true));
+                if (!self.hasStatusEffect(EnduranceStatusEffects.ENDURANCE) && !self.hasStatusEffect(EnduranceStatusEffects.DEEP_WOUND)) {
+                    self.addStatusEffect(new StatusEffectInstance(EnduranceStatusEffects.ENDURANCE, -1, lvl - 1, false, true, true));
                 }
-            } else if (self.hasStatusEffect(ModStatusEffects.ENDURANCE) && self.getStatusEffect(ModStatusEffects.ENDURANCE).isInfinite()) {
-                self.removeStatusEffect(ModStatusEffects.ENDURANCE);
+            } else if (self.hasStatusEffect(EnduranceStatusEffects.ENDURANCE) && self.getStatusEffect(EnduranceStatusEffects.ENDURANCE).isInfinite()) {
+                self.removeStatusEffect(EnduranceStatusEffects.ENDURANCE);
             }
 
             if (HasDeepWound()) {
@@ -91,8 +104,8 @@ public class PlayerEntityMixin implements IPlayerEntity {
                     tickToDuction -= deduct;
 
                     if (tickToDuction <= 0) {
-                        self.getStatusEffect(ModStatusEffects.DEEP_WOUND).getEffectType().value().applyUpdateEffect(world, self, 0);
-                        tickToDuction = 20f;
+                        self.getStatusEffect(EnduranceStatusEffects.DEEP_WOUND).getEffectType().value().applyUpdateEffect(world, self, 0);
+                        tickToDuction = GetTimeRequiredToBleed();
                     }
                 } else {
                     IncrementTrackedInt(PAUSE_DEDUCTION_TICK, -1);
@@ -100,14 +113,14 @@ public class PlayerEntityMixin implements IPlayerEntity {
 
                 if (GetTemporaryHealth() < 1) {
                     SetTemporaryHealth(0);
-                    self.damage(world, ModDamageTypes.GetSource(world, ModDamageTypes.DEEP_WOUND_DAMAGE), Float.MAX_VALUE);
+                    self.damage(world, EnduranceDamageTypes.GetSource(world, EnduranceDamageTypes.DEEP_WOUND_DAMAGE), Float.MAX_VALUE);
                 }
 
                 if (CanRecoverDeepWound()) {
                     SetTrackedData(PAUSE_DEDUCTION_TICK, 1);
                     tickToMend += 1;
 
-                    if (tickToMend >= 5) {
+                    if (tickToMend >= GetTimeRequiredToMend()) {
                         AddMendingProgress(1);
                         tickToMend = 0;
                     }
@@ -129,6 +142,13 @@ public class PlayerEntityMixin implements IPlayerEntity {
             if (killEnduranceCd > 0) {
                 killEnduranceCd--;
             }
+        } else {
+            if (HasDeepWound()) {
+                removedDeepWoundTime = 0;
+                appliedDeepWoundTime++;
+            } else if (removedDeepWoundTime < 30) {
+                removedDeepWoundTime++;
+            }
         }
     }
 
@@ -148,7 +168,7 @@ public class PlayerEntityMixin implements IPlayerEntity {
 
     @Inject(method = "applyDamage", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/player/PlayerEntity;isInvulnerableTo(Lnet/minecraft/server/world/ServerWorld;Lnet/minecraft/entity/damage/DamageSource;)Z", shift = At.Shift.AFTER), cancellable = true)
     private void DamageDeepWound(ServerWorld world, DamageSource source, float amount, CallbackInfo info) {
-        if (GetSelf().hasStatusEffect(ModStatusEffects.DEEP_WOUND) && !source.isOf(ModDamageTypes.DEEP_WOUND_DAMAGE)) {
+        if (self.hasStatusEffect(EnduranceStatusEffects.DEEP_WOUND) && !source.isOf(EnduranceDamageTypes.DEEP_WOUND_DAMAGE)) {
             int time = damagedWhileDeepWoundTime;
             if (time == 0) {
                 IncrementTrackedFloat(TEMPORARY_HEALTH, -amount);
@@ -165,19 +185,18 @@ public class PlayerEntityMixin implements IPlayerEntity {
 
     @Inject(method = "applyDamage", at = @At("TAIL"))
     private void RemoveShield(ServerWorld world, DamageSource source, float amount, CallbackInfo info) {
-        if (GetSelf().getAbsorptionAmount() <= 0) {
-            GetSelf().getAttributeInstance(EntityAttributes.MAX_ABSORPTION).removeModifier(Endurance.Id("effect.deep_wound.removed"));
+        if (self.getAbsorptionAmount() <= 0) {
+            self.getAttributeInstance(EntityAttributes.MAX_ABSORPTION).removeModifier(Endurance.Id("effect.deep_wound.removed"));
         }
     }
 
     @Inject(method = "onKilledOther", at = @At("RETURN"))
     private void ApplyEnduranceOnKilledOther(ServerWorld world, LivingEntity other, CallbackInfoReturnable<Boolean> info) {
-        var self = GetSelf();
-        if (info.getReturnValue() && killEnduranceCd <= 0 && !self.hasStatusEffect(ModStatusEffects.ENDURANCE)) {
+        if (info.getReturnValue() && killEnduranceCd <= 0 && !self.hasStatusEffect(EnduranceStatusEffects.ENDURANCE)) {
             float chance = 0.2f;
             chance += MathHelper.lerp(self.getHealth() / self.getMaxHealth(), 0.6f, 0f);
             if (world.random.nextFloat() < chance) {
-                self.addStatusEffect(new StatusEffectInstance(ModStatusEffects.ENDURANCE, 100, 0, false, true, true));
+                self.addStatusEffect(new StatusEffectInstance(EnduranceStatusEffects.ENDURANCE, 100, 0, false, true, true));
             }
         }
     }
@@ -208,11 +227,9 @@ public class PlayerEntityMixin implements IPlayerEntity {
 
     @Override
     public void OnAppliedDeepWound() {
-        var self = GetSelf();
-
         List<StatusEffectInstance> effects = List.copyOf(self.getStatusEffects());
         for (var effect : effects) {
-            if (!effect.getEffectType().matchesKey(ModStatusEffects.DEEP_WOUND.getKey().get())) {
+            if (!effect.getEffectType().matchesKey(EnduranceStatusEffects.DEEP_WOUND.getKey().get())) {
                 self.removeStatusEffect(effect.getEffectType());
             }
         }
@@ -221,7 +238,7 @@ public class PlayerEntityMixin implements IPlayerEntity {
 
         SetTemporaryHealth(20);
         SetTrackedData(MENDING_PROGRESS, 0f);
-        tickToDuction = 20f;
+        tickToDuction = GetTimeRequiredToBleed();
         SetTrackedData(PAUSE_DEDUCTION_TICK, 0);
         tickToMend = 0;
         tickToLoseMend = 0;
@@ -230,8 +247,8 @@ public class PlayerEntityMixin implements IPlayerEntity {
 
     @Override
     public void OnRemovedDeepWound() {
-        if (GetTemporaryHealth() > 0 && GetSelf().getHealth() > GetTemporaryHealth()) {
-            GetSelf().setHealth(GetTemporaryHealth());
+        if (GetTemporaryHealth() > 0 && self.getHealth() > GetTemporaryHealth()) {
+            self.setHealth(GetTemporaryHealth());
         }
     }
 
@@ -270,12 +287,12 @@ public class PlayerEntityMixin implements IPlayerEntity {
 
     @Override
     public boolean HasDeepWound() {
-        return GetSelf().hasStatusEffect(ModStatusEffects.DEEP_WOUND);
+        return self.hasStatusEffect(EnduranceStatusEffects.DEEP_WOUND);
     }
 
     @Override
     public float GetHealRate() {
-        return GetSelf().isSneaking() ? 1.2f : 0.75f;
+        return self.isSneaking() ? 1.2f : 0.75f;
     }
 
     @Override
@@ -283,17 +300,42 @@ public class PlayerEntityMixin implements IPlayerEntity {
         return Math.round(GetTrackedData(MENDING_PROGRESS));
     }
 
+    @Override
+    public int GetInjuredTime() {
+        return appliedDeepWoundTime;
+    }
+
+    @Override
+    public int GetRemovedInjuriesTime() {
+        return removedDeepWoundTime;
+    }
+
+    @Unique
+    private int GetTimeRequiredToBleed() {
+        if (!HasDeepWound()) return -1;
+
+        int lvl = self.getStatusEffect(EnduranceStatusEffects.DEEP_WOUND).getAmplifier();
+        return (int) (20 * (1 - 0.08f * lvl));
+    }
+
+    @Unique
+    private int GetTimeRequiredToMend() {
+        if (!HasDeepWound()) return -1;
+
+        int lvl = self.getStatusEffect(EnduranceStatusEffects.DEEP_WOUND).getAmplifier();
+        return (int) (5 * (1 - 0.12f * lvl));
+    }
+
     @Unique
     private void PauseDeduction() {
-        if (GetSelf().hasStatusEffect(ModStatusEffects.DEEP_WOUND)) {
+        if (self.hasStatusEffect(EnduranceStatusEffects.DEEP_WOUND)) {
             SetTrackedData(PAUSE_DEDUCTION_TICK, 40);
         }
     }
 
     @Unique
     private void RemoveDeepWound() {
-        var self = GetSelf();
-        self.removeStatusEffect(ModStatusEffects.DEEP_WOUND);
+        self.removeStatusEffect(EnduranceStatusEffects.DEEP_WOUND);
 
         float shield = Math.max(3, GetTemporaryHealth() * 0.3f);
         var id = Endurance.Id("effect.deep_wound.removed");
@@ -317,12 +359,12 @@ public class PlayerEntityMixin implements IPlayerEntity {
 
     @Unique
     private <T> T GetTrackedData(TrackedData<T> data) {
-        return GetSelf().getDataTracker().get(data);
+        return self.getDataTracker().get(data);
     }
 
     @Unique
     private <T> void SetTrackedData(TrackedData<T> data, T value) {
-        GetSelf().getDataTracker().set(data, value);
+        self.getDataTracker().set(data, value);
     }
 
     @Unique
@@ -337,17 +379,11 @@ public class PlayerEntityMixin implements IPlayerEntity {
 
     @Unique
     private boolean CanRecoverDeepWound() {
-        var self = GetSelf();
         return self.isSneaking() && !IsMoving();
     }
 
     @Unique
     private boolean IsMoving() {
-        return GetSelf().getPos().distanceTo(prevPos) > 0;
-    }
-
-    @Unique
-    private PlayerEntity GetSelf() {
-        return (PlayerEntity) (Object) this;
+        return self.getPos().distanceTo(prevPos) > 0;
     }
 }

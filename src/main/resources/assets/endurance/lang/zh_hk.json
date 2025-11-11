@@ -14,14 +14,24 @@
   "item.minecraft.potion.effect.bleeding": "失血藥水",
   "item.minecraft.potion.effect.long_endurance": "堅忍藥水",
   "item.minecraft.potion.effect.long_bleeding": "失血藥水",
+  "item.minecraft.potion.effect.enhanced_endurance": "堅忍藥水",
+  "item.minecraft.potion.effect.enhanced_bleeding": "失血藥水",
 
   "item.minecraft.splash_potion.effect.endurance": "飛濺型堅忍藥水",
   "item.minecraft.splash_potion.effect.bleeding": "飛濺型失血藥水",
   "item.minecraft.splash_potion.effect.long_endurance": "飛濺型堅忍藥水",
   "item.minecraft.splash_potion.effect.long_bleeding": "飛濺型失血藥水",
+  "item.minecraft.splash_potion.effect.enhanced_endurance": "飛濺型堅忍藥水",
+  "item.minecraft.splash_potion.effect.enhanced_bleeding": "飛濺型失血藥水",
 
   "item.minecraft.lingering_potion.effect.endurance": "滯留型堅忍藥水",
   "item.minecraft.lingering_potion.effect.bleeding": "滯留型失血藥水",
   "item.minecraft.lingering_potion.effect.long_endurance": "滯留型堅忍藥水",
-  "item.minecraft.lingering_potion.effect.long_bleeding": "滯留型失血藥水"
+  "item.minecraft.lingering_potion.effect.long_bleeding": "滯留型失血藥水",
+  "item.minecraft.lingering_potion.effect.enhanced_endurance": "滯留型堅忍藥水",
+  "item.minecraft.lingering_potion.effect.enhanced_bleeding": "滯留型失血藥水",
+
+
+  "modmenu.nameTranslation.endurance": "堅忍",
+  "modmenu.descriptionTranslation.endurance": "新增了【堅忍】和【深度傷口】2個狀態效果，以及1個附魔和2個相關藥水。\n\n詳情請看Wiki，以下是簡單介紹：\n\n【堅忍】\n避免一次死亡並添加【深度傷口】。\n\n如果已經持有【深度傷口】則不生效。\n\n【深度傷口】\n獲得20點持續流逝的出血值，歸零後死亡。\n\n恢復生命值或者蹲下並靜止時，獲得縫合進度。\n\n縫合進度達到上限後解除【深度傷口】，并獲得短暫加速和生命恢復效果。\n\n【不死】附魔\n提供【堅忍】狀態，觸發後最多冷卻2分鐘。"
 }

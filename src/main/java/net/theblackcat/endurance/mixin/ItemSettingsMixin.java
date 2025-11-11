@@ -3,7 +3,7 @@ package net.theblackcat.endurance.mixin;
 import net.minecraft.item.Item;
 import net.minecraft.item.equipment.ArmorMaterial;
 import net.minecraft.item.equipment.EquipmentType;
-import net.theblackcat.endurance.data_components.ModDataComponents;
+import net.theblackcat.endurance.data_components.EnduranceDataComponents;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -14,7 +14,7 @@ public class ItemSettingsMixin {
     @Inject(method = "armor", at = @At("RETURN"))
     private void AddCooldownComponent(ArmorMaterial material, EquipmentType type, CallbackInfoReturnable<Item.Settings> info) {
         if (type.equals(EquipmentType.CHESTPLATE)) {
-            info.getReturnValue().component(ModDataComponents.UNDYING_COOLDOWN_TYPE, -1);
+            info.getReturnValue().component(EnduranceDataComponents.UNDYING_COOLDOWN_TYPE, -1);
         }
     }
 }
