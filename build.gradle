@@ -20,6 +20,8 @@ repositories {
         name = "Terraformers"
         url = "https://maven.terraformersmc.com/"
     }
+
+    mavenLocal()
 }
 
 fabricApi {
@@ -37,9 +39,12 @@ dependencies {
     //mod menu
     modCompileOnly "com.terraformersmc:modmenu:${project.modmenu_version}"
 
+    //my library
+    modImplementation "net.theblackcat:duskywisp_library:${project.duskywisp_library}"
+    include "net.theblackcat:duskywisp_library:${project.duskywisp_library}"
+
 	// Fabric API. This is technically optional, but you probably want it anyway.
 	modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
-	
 }
 
 processResources {

@@ -1,0 +1,46 @@
+{
+	"schemaVersion": 1,
+	"id": "endurance",
+	"version": "${version}",
+	"name": "Endurance",
+	"description": "",
+	"authors": [
+		"The Black Cat"
+	],
+	"contact": {
+		"sources": "https://github.com/The-best-cat/endurance-fabric"
+	},
+	"license": "All Rights Reserved",
+	"icon": "assets/endurance/icon.png",
+	"environment": "*",
+	"entrypoints": {
+		"main": [
+			"net.theblackcat.endurance.Endurance"
+		],
+        "client": [
+            "net.theblackcat.endurance.EnduranceClient"
+        ],
+		"fabric-datagen": [
+			"net.theblackcat.endurance.EnduranceDataGenerator"
+		]
+	},
+	"mixins": [
+		"endurance.mixins.json"
+	],
+	"depends": {
+		"fabricloader": ">=0.17.3",
+		"minecraft": "~1.21.9",
+		"java": ">=21",
+		"fabric-api": "*"
+	},
+	"suggests": {
+		"another-mod": "*"
+	},
+    "custom": {
+        "modmenu": {
+            "links": {
+                "Modrinth": "https://modrinth.com/mod/deep-wound"
+            }
+        }
+    }
+}

@@ -1,0 +1,42 @@
+{
+  "effect.endurance.endurance": "堅忍",
+  "effect.endurance.deep_wound": "深度傷口",
+
+  "death.attack.deep_wound": "%1$s 的傷勢過重了。",
+  "death.attack.deep_wound.player": "%1$s 的傷勢過重了。",
+
+  "death.attack.borrowed_life": "%1$s 的生命被 %2$s 「借用」了。",
+
+  "enchantment.endurance.undying": "不死",
+  "enchantment.endurance.borrowed_life": "噬命",
+
+  "item.endurance.undying_cooldown.tooltip": "不死冷卻中（%d:%s）",
+  "item.endurance.undying.will_break.tooltip": "下次觸發【不死】後損毀",
+
+  "item.endurance.borrowed_life_cooldown.tooltip": "噬命冷卻中（%d:%s）",
+
+  "item.minecraft.potion.effect.endurance": "堅忍藥水",
+  "item.minecraft.potion.effect.bleeding": "失血藥水",
+  "item.minecraft.potion.effect.long_endurance": "堅忍藥水",
+  "item.minecraft.potion.effect.long_bleeding": "失血藥水",
+  "item.minecraft.potion.effect.enhanced_endurance": "堅忍藥水",
+  "item.minecraft.potion.effect.enhanced_bleeding": "失血藥水",
+
+  "item.minecraft.splash_potion.effect.endurance": "飛濺型堅忍藥水",
+  "item.minecraft.splash_potion.effect.bleeding": "飛濺型失血藥水",
+  "item.minecraft.splash_potion.effect.long_endurance": "飛濺型堅忍藥水",
+  "item.minecraft.splash_potion.effect.long_bleeding": "飛濺型失血藥水",
+  "item.minecraft.splash_potion.effect.enhanced_endurance": "飛濺型堅忍藥水",
+  "item.minecraft.splash_potion.effect.enhanced_bleeding": "飛濺型失血藥水",
+
+  "item.minecraft.lingering_potion.effect.endurance": "滯留型堅忍藥水",
+  "item.minecraft.lingering_potion.effect.bleeding": "滯留型失血藥水",
+  "item.minecraft.lingering_potion.effect.long_endurance": "滯留型堅忍藥水",
+  "item.minecraft.lingering_potion.effect.long_bleeding": "滯留型失血藥水",
+  "item.minecraft.lingering_potion.effect.enhanced_endurance": "滯留型堅忍藥水",
+  "item.minecraft.lingering_potion.effect.enhanced_bleeding": "滯留型失血藥水",
+
+
+  "modmenu.nameTranslation.endurance": "堅忍",
+  "modmenu.descriptionTranslation.endurance": "新增了【堅忍】和【深度傷口】2個狀態效果，以及1個附魔和2個相關藥水。\n\n詳情請看Wiki。"
+}

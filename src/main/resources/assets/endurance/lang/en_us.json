@@ -1,0 +1,42 @@
+{
+  "effect.endurance.endurance": "Endurance",
+  "effect.endurance.deep_wound": "Deep Wound",
+
+  "death.attack.deep_wound": "%1$s died from severe injuries.",
+  "death.attack.deep_wound.player": "%1$s died from severe injuries.",
+
+  "death.attack.borrowed_life": "%1$s's life is \"borrowed\" by %2$s.",
+
+  "enchantment.endurance.undying": "Undying",
+  "enchantment.endurance.borrowed_life": "Borrowed Life",
+
+  "item.endurance.undying_cooldown.tooltip": "Undying in cooldown (%d:%s)",
+  "item.endurance.undying.will_break.tooltip": "Breaks on next Undying trigger",
+
+  "item.endurance.borrowed_life_cooldown.tooltip": "Borrowed Life in cooldown (%d:%s)",
+
+  "item.minecraft.potion.effect.endurance": "Potion of Endurance",
+  "item.minecraft.potion.effect.bleeding": "Potion of Bleeding",
+  "item.minecraft.potion.effect.long_endurance": "Potion of Endurance",
+  "item.minecraft.potion.effect.long_bleeding": "Potion of Bleeding",
+  "item.minecraft.potion.effect.enhanced_endurance": "Potion of Endurance",
+  "item.minecraft.potion.effect.enhanced_bleeding": "Potion of Bleeding",
+
+  "item.minecraft.splash_potion.effect.endurance": "Splash Potion of Endurance",
+  "item.minecraft.splash_potion.effect.bleeding": "Splash Potion of Bleeding",
+  "item.minecraft.splash_potion.effect.long_endurance": "Splash Potion of Endurance",
+  "item.minecraft.splash_potion.effect.long_bleeding": "Splash Potion of Bleeding",
+  "item.minecraft.splash_potion.effect.enhanced_endurance": "Splash Potion of Endurance",
+  "item.minecraft.splash_potion.effect.enhanced_bleeding": "Splash Potion of Bleeding",
+
+  "item.minecraft.lingering_potion.effect.endurance": "Lingering Potion of Endurance",
+  "item.minecraft.lingering_potion.effect.bleeding": "Lingering Potion of Bleeding",
+  "item.minecraft.lingering_potion.effect.long_endurance": "Lingering Potion of Endurance",
+  "item.minecraft.lingering_potion.effect.long_bleeding": "Lingering Potion of Bleeding",
+  "item.minecraft.lingering_potion.effect.enhanced_endurance": "Lingering Potion of Endurance",
+  "item.minecraft.lingering_potion.effect.enhanced_bleeding": "Lingering Potion of Bleeding",
+
+
+  "modmenu.nameTranslation.endurance": "Endurance",
+  "modmenu.descriptionTranslation.endurance": "Added two new status effects, 【Endurance】 and 【Deep Wound】, as well as one enchantment and two related potions.\n\nSee the Wiki for details."
+}
