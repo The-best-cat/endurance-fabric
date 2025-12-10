@@ -97,6 +97,7 @@ public class Endurance implements ModInitializer {
                     }
 
                     player.setHealth(1f);
+                    player.removeStatusEffect(EnduranceStatusEffects.DEEP_WOUND);
                     player.addStatusEffect(new StatusEffectInstance(EnduranceStatusEffects.DEEP_WOUND, -1, maxLvl - 1, false, true, true));
                     ((IPlayerEntity)player).addMP(Math.min(15f, token));
                     return false;

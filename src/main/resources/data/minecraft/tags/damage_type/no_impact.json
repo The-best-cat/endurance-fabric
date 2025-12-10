@@ -1,4 +1,5 @@
 {
+  "replace": false,
   "values": [
     "endurance:deep_wound",
     "endurance:borrowed_life"

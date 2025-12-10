@@ -7,6 +7,7 @@ public interface IEffectInstance {
     void setEntity(LivingEntity entity);
     void setSourceStack(ItemStack stack, boolean assignId);
     ItemStack getSourceStack();
+    boolean isFromUndying();
     void setFromEndurance();
     boolean isFromEndurance();
 }

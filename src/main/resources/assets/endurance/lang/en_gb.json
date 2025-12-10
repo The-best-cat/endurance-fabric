@@ -36,6 +36,12 @@
   "item.minecraft.lingering_potion.effect.enhanced_endurance": "Lingering Potion of Endurance",
   "item.minecraft.lingering_potion.effect.enhanced_bleeding": "Lingering Potion of Bleeding",
 
+  "item.minecraft.tipped_arrow.effect.endurance": "Arrow of Endurance",
+  "item.minecraft.tipped_arrow.effect.bleeding": "Arrow of Bleeding",
+  "item.minecraft.tipped_arrow.effect.long_endurance": "Arrow of Endurance",
+  "item.minecraft.tipped_arrow.effect.long_bleeding": "Arrow of Bleeding",
+  "item.minecraft.tipped_arrow.effect.enhanced_endurance": "Arrow of Endurance",
+  "item.minecraft.tipped_arrow.effect.enhanced_bleeding": "Arrow of Bleeding",
 
   "modmenu.nameTranslation.endurance": "Endurance",
   "modmenu.descriptionTranslation.endurance": "Added two new status effects, 【Endurance】 and 【Deep Wound】, as well as some enchantments and two related potions.\n\nSee the Wiki for details."

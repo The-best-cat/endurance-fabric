@@ -11,11 +11,9 @@
   "enchantment.endurance.borrowed_life": "噬命",
 
   "item.endurance.undying_cooldown.tooltip": "不死冷卻中（%d:%s）",
-  "item.endurance.undying_cooldown.activated.tooltip": "不死生效中",
   "item.endurance.undying.will_break.tooltip": "下次觸發【不死】後損毀",
 
   "item.endurance.borrowed_life_cooldown.tooltip": "噬命冷卻中（%d:%s）",
-  "item.endurance.borrowed_life_cooldown.activated.tooltip": "噬命生效中",
 
   "item.minecraft.potion.effect.endurance": "堅忍藥水",
   "item.minecraft.potion.effect.bleeding": "失血藥水",
@@ -38,6 +36,12 @@
   "item.minecraft.lingering_potion.effect.enhanced_endurance": "滯留型堅忍藥水",
   "item.minecraft.lingering_potion.effect.enhanced_bleeding": "滯留型失血藥水",
 
+  "item.minecraft.tipped_arrow.effect.endurance": "堅忍之箭",
+  "item.minecraft.tipped_arrow.effect.bleeding": "失血之箭",
+  "item.minecraft.tipped_arrow.effect.long_endurance": "堅忍之箭",
+  "item.minecraft.tipped_arrow.effect.long_bleeding": "失血之箭",
+  "item.minecraft.tipped_arrow.effect.enhanced_endurance": "堅忍之箭",
+  "item.minecraft.tipped_arrow.effect.enhanced_bleeding": "失血之箭",
 
   "modmenu.nameTranslation.endurance": "堅忍",
   "modmenu.descriptionTranslation.endurance": "新增了【堅忍】和【深度傷口】2個狀態效果，以及1個附魔和2個相關藥水。\n\n詳情請看Wiki。"

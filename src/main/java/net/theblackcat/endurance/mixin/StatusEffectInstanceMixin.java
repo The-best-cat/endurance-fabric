@@ -14,7 +14,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(StatusEffectInstance.class)
-public abstract class StatusEffectInstanceMixin implements IEffectInstance {
+public class StatusEffectInstanceMixin implements IEffectInstance {
     @Unique
     private LivingEntity entity;
     @Unique
@@ -51,6 +51,11 @@ public abstract class StatusEffectInstanceMixin implements IEffectInstance {
             return DuskyWispItemHelper.findItemById(player, fromStack, "endurance_apply_stack");
         }
         return ItemStack.EMPTY;
+    }
+
+    @Override
+    public boolean isFromUndying() {
+        return fromStack != null;
     }
 
     @Override

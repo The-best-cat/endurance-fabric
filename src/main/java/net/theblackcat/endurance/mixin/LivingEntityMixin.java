@@ -7,6 +7,7 @@ import net.minecraft.entity.EntityType;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.attribute.EntityAttributeModifier;
+import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.effect.StatusEffect;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.player.PlayerEntity;
@@ -27,6 +28,7 @@ import net.theblackcat.endurance.interfaces.IEffectInstance;
 import net.theblackcat.endurance.interfaces.IPlayerEntity;
 import net.theblackcat.endurance.status_effects.EnduranceStatusEffects;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -69,8 +71,11 @@ public class LivingEntityMixin {
                 }
             } else if (self.hasStatusEffect(EnduranceStatusEffects.ENDURANCE)) {
                 var endurance = self.getStatusEffect(EnduranceStatusEffects.ENDURANCE);
-                if (endurance instanceof IEffectInstance instance && EnduranceHelper.getUndyingLevel(world, instance.getSourceStack()) > 0) {
-                    self.removeStatusEffect(EnduranceStatusEffects.ENDURANCE);
+                if (endurance instanceof IEffectInstance instance && endurance.isInfinite() && instance.isFromUndying()) {
+                    var stack = instance.getSourceStack();
+                    if (stack.isEmpty() || !ItemStack.areItemsAndComponentsEqual(stack, chest)) {
+                        self.removeStatusEffect(EnduranceStatusEffects.ENDURANCE);
+                    }
                 }
             }
         }

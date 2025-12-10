@@ -36,7 +36,7 @@ import java.util.List;
 @Mixin(PlayerEntity.class)
 public class PlayerEntityMixin implements IPlayerEntity {
     @Unique
-    private static final TrackedData<Float> TEMPORARY_HEALTH = DataTracker.registerData(PlayerEntity.class, TrackedDataHandlerRegistry.FLOAT);
+    private static final TrackedData<Float> BLEED_POINT = DataTracker.registerData(PlayerEntity.class, TrackedDataHandlerRegistry.FLOAT);
     @Unique
     private static final TrackedData<Float> MENDING_PROGRESS = DataTracker.registerData(PlayerEntity.class, TrackedDataHandlerRegistry.FLOAT);
     @Unique
@@ -66,7 +66,7 @@ public class PlayerEntityMixin implements IPlayerEntity {
 
     @Inject(method = "initDataTracker", at = @At("TAIL"))
     private void initCustomData(DataTracker.Builder builder, CallbackInfo info) {
-        builder.add(TEMPORARY_HEALTH, 0f);
+        builder.add(BLEED_POINT, 0f);
         builder.add(MENDING_PROGRESS, 0f);
         builder.add(PAUSE_DEDUCTION_TICK, 0);
     }
@@ -144,18 +144,26 @@ public class PlayerEntityMixin implements IPlayerEntity {
     private void damageDeepWound(ServerWorld world, DamageSource source, float amount, CallbackInfo info) {
         var deepWound = self.getStatusEffect(EnduranceStatusEffects.DEEP_WOUND);
         if (deepWound != null && !source.isOf(EnduranceDamageTypes.DEEP_WOUND)) {
-            incrementFloat(TEMPORARY_HEALTH, -amount);
+            incrementFloat(BLEED_POINT, -amount);
+
+            if (getBP() <= 0) return;
 
             if (isDeepWoundFromEndurance(deepWound)) {
                 if (damagedWhileDeepWoundTime == 1) {
-                    incrementFloat(TEMPORARY_HEALTH, -(getBP() * 0.25f));
+                    incrementFloat(BLEED_POINT, -(getBP() * 0.25f));
                 } else if (damagedWhileDeepWoundTime == 2) {
                     setBP(0);
                 }
                 damagedWhileDeepWoundTime++;
             }
 
-            info.cancel();
+            if (getBP() > 0) {
+                info.cancel();
+                return;
+            }
+
+            self.setAbsorptionAmount(0);
+            self.setHealth(0);
         }
     }
 
@@ -219,12 +227,12 @@ public class PlayerEntityMixin implements IPlayerEntity {
 
     @Override
     public float getBP() {
-        return getData(TEMPORARY_HEALTH);
+        return getData(BLEED_POINT);
     }
 
     @Override
     public void setBP(float thp) {
-        setData(TEMPORARY_HEALTH, Math.clamp(thp, 0f, 20f));
+        setData(BLEED_POINT, Math.clamp(thp, 0f, 20f));
     }
 
     @Override

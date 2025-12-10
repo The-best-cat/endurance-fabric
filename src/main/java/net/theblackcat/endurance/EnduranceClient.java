@@ -90,7 +90,7 @@ public class EnduranceClient implements ClientModInitializer {
 
                     if (player.hasDeepWound()) {
                         rawAlpha = MathHelper.lerp(Math.clamp((float) player.getInjuredTime() / 10f, 0f, 1f), 0f, 0.25f);
-                        rawAlpha += MathHelper.lerp(player.getBP() / 20f, 0.6f, 0f);
+                        rawAlpha += MathHelper.lerp(player.getBP() / 20f, 0.45f, 0f);
                         smoothing = 0.05f;
                     } else {
                         rawAlpha = MathHelper.lerp(Math.clamp((float) player.getRemovedInjuriesTime() / 30f, 0f, 1f), finalAlpha, 0);
