@@ -1,15 +1,14 @@
 {
   "effect.endurance.endurance": "Endurance",
-  "effect.endurance.deep_wound": "Blessures importantes", //Not the exact traduction, but it would have sound not very casual in french
+  "effect.endurance.deep_wound": "Mourant",
 
   "death.attack.deep_wound": "%1$s a succombé à ses blessures.",
   "death.attack.deep_wound.player": "%1$s a succombé à ses blessures.",
 
   "death.attack.borrowed_life": "La vie de %1$s a été \"volé\" par %2$s.",
 
-  "enchantment.endurance.undying": "Imbattable", //Undying would normally be "L'éternel" (the eternal) or "L'imperissable" (the imperishable), there I said the unbeatable
-                                                  // (=Imbattable), couldn't find some closer words, Im leaving a choice to be made in there.
-  "enchantment.endurance.borrowed_life": "Vol de vie", //Borrowed_life = "vie volée/empruntée" but "Vole de vie" = Life steal(-ing/-er ?), I think it would be the closest one to do not sound weird-ish.
+  "enchantment.endurance.undying": "Survivant", 
+  "enchantment.endurance.borrowed_life": "Vol de vie",
 
   "item.endurance.undying_cooldown.tooltip": "Imbattable est en recharge : (%d:%s)",
   "item.endurance.undying.will_break.tooltip": "Se casse la prochaine fois que Imbattable est activé",
@@ -45,5 +44,5 @@
   "item.minecraft.tipped_arrow.effect.enhanced_bleeding": "Flèche de saignement",
 
   "modmenu.nameTranslation.endurance": "Endurance",
-  "modmenu.descriptionTranslation.endurance": "Ajoute deux nouveaux effets, 【Endurance】 et 【Blessure importante】, ajoute aussi 2 nouveaux enchantement et 2 potions \n\n Consultez le wiki pour plus de détails (en anglais !)."
+  "modmenu.descriptionTranslation.endurance": "Ajoute deux nouveaux effets, 【Endurance】 et 【Mourant】, ajoute aussi 2 nouveaux enchantement et 2 potions \n\n Consultez le wiki pour plus de détails (en anglais !)."
 }
